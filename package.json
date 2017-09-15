@@ -1,0 +1,49 @@
+{
+  "name": "got-download",
+  "version": "0.0.1",
+  "description": "Download utility on top of got",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rilix-global/got-download.git"
+  },
+  "keywords": [
+    "got",
+    "download",
+    "checksum"
+  ],
+  "author": "Rilix, Ltda.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rilix-global/got-download/issues"
+  },
+  "homepage": "https://github.com/rilix-global/got-download#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-jest": "^21.0.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "codeclimate-test-reporter": "^0.5.0",
+    "es6-promisify": "^5.0.0",
+    "eslint": "^4.6.1",
+    "hapi": "^16.6.0",
+    "inert": "^4.2.1",
+    "jest": "^21.1.0",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**"
+    ],
+    "coveragePathIgnorePatterns": [
+      "node_modules/"
+    ]
+  },
+  "dependencies": {
+    "got": "^7.1.0"
+  }
+}
