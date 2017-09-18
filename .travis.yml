@@ -1,0 +1,24 @@
+sudo: required
+
+services:
+  - docker
+
+language: node
+
+before_install:
+  - docker --version
+  - docker-compose --version
+  - docker-compose pull
+
+script:
+  - docker-compose run --rm module yarn install
+  - docker-compose run --rm module yarn test -- --coverage --forceExit --runInBand --no-cache
+  - docker-compose run --rm module yarn run codeclimate-test-reporter < coverage/lcov.info
+  - docker-compose run --rm module yarn run compile
+
+deploy:
+  provider: npm
+  email: "developer@rilix.com.br"
+  api_key: $NPM_TOKEN
+  on:
+    branch: master
