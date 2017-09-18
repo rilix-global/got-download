@@ -119,4 +119,66 @@ describe('got-download', () => {
       done();
     });
   });
+
+  it('moves from temp path to filename when finish', async () => {
+    expect.assertions(2);
+
+    await gotDownload('0.0.0.0:7845/text-file.txt', {
+      filename: path.join(downloadsPath, '/text-file.txt'),
+      tempPath
+    });
+
+    const fileContent = await readFile(path.join(downloadsPath, '/text-file.txt'), { encoding: 'utf8' });
+    const tempFiles = await readdir(tempPath);
+    expect(tempFiles.length).toBe(0);
+    expect(fileContent).toEqual('some very cool test here\n');
+  });
+
+  it('has progress callback', (done) => {
+    expect.hasAssertions();
+
+    const stream = gotDownload.stream('0.0.0.0:7845/one-mb', {
+      filename: path.join(downloadsPath, '/one-mb'),
+      downloadProgress: (progress) => {
+        expect(progress).toEqual({
+          downloaded: expect.any(Number),
+          total: expect.any(Number)
+        });
+      }
+    });
+
+    stream.on('end', () => {
+      done();
+    });
+  });
+
+  describe('checksum', () => {
+    it('fails on wrong checksum', async () => {
+      expect.assertions(1);
+
+      try {
+        await gotDownload('0.0.0.0:7845/text-file.txt', {
+          filename: path.join(downloadsPath, '/text-file.txt'),
+          checksum: 'wrongchecksum',
+          algorithm: 'sha512'
+        });
+      } catch (e) {
+        expect(e).toBeDefined();
+      }
+    });
+
+    it('succeeds on right checksum', async () => {
+      expect.assertions(1);
+      
+      await gotDownload('0.0.0.0:7845/one-mb', {
+        filename: path.join(downloadsPath, '/one-mb'),
+        checksum: 'qGLDYERgb5mi0RoiB72x5Djm7SNbqcHgQdB2BCkipfGWNno44Xt4nOBiOCenY9M7ZBAqpuUgumyF0pA3plkPQw==',
+        algorithm: 'sha512'
+      });
+  
+      const file = await readFile(path.join(downloadsPath, '/one-mb'), { encoding: 'utf8' });
+      
+      expect(file).toBeDefined();
+    });
+  });
 });
