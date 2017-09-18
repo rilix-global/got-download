@@ -1,8 +1,8 @@
 {
   "name": "got-download",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Download utility on top of got",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "lint": "eslint src spec",
