@@ -29,18 +29,18 @@ function stream(url, { filename, tempPath, downloadProgress, checksum, algorithm
   const stream = got.stream(url, options);
 
   handleChecksum(stream, checksum, algorithm);
-  
-  handleFileWrite(stream, filename, tempPath);
 
   handleProgress(stream, downloadProgress);
   
+  handleFileWrite(stream, filename, tempPath);
+
   return stream;
 }
 
 function handleChecksum(stream, checksum, algorithm) {
   if(checksum) {
     const hash = crypto.createHash(algorithm);
-
+    
     stream.on('data', function (data) {
       hash.update(data, 'utf8');
     });
@@ -48,31 +48,12 @@ function handleChecksum(stream, checksum, algorithm) {
     stream.on('readable', function () {
       if (stream.read() === null) {
         const calculatedChecksum = hash.digest('base64');
+
         if (checksum !== calculatedChecksum) {
           stream.removeAllListeners('end');
           stream.destroy( new Error(`Invalid Checksum. Expected ${checksum} received ${calculatedChecksum}`));
         }
       }
-    });
-  }
-}
-
-function handleFileWrite(stream, filename, tempPath) {
-  let name = filename;
-  
-  if (tempPath) {
-    name = path.join(tempPath, path.basename(filename) + new Date().getTime());
-  }
-
-  stream.pipe(fs.createWriteStream(name));
-
-  stream.on('error', async () => {
-    await unlink(filename);
-  });
-
-  if (tempPath) {
-    stream.on('end', async () => {
-      await rename(name, filename);
     });
   }
 }
@@ -83,7 +64,6 @@ function handleProgress(stream, downloadProgress) {
 
   stream.on('response', res => {
     const length = res.headers['content-length'];
-
     total = length ? parseInt(length, 10) : null;
   });
 
@@ -98,3 +78,18 @@ function handleProgress(stream, downloadProgress) {
   });
 }
 
+function handleFileWrite(stream, filename, tempPath) {
+  const tempFilename = tempPath ? path.join(tempPath, path.basename(filename) + new Date().getTime()) : null;
+  
+  if (tempFilename) {
+    stream.on('end', async () => {
+      await rename(tempFilename, filename);
+    });
+  }
+
+  stream.pipe(fs.createWriteStream(tempFilename || filename));
+  
+  stream.on('error', async () => {
+    await unlink(filename);
+  });
+}
