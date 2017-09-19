@@ -21,7 +21,11 @@ async function gotDownload (url, options) {
   
     downloadStream.on('error', (error) => {
       reject(error);
-    });  
+    });
+    
+    downloadStream.on('aborted', (error) => {
+      reject(error);
+    });
   });
 }
 
