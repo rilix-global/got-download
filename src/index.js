@@ -23,7 +23,14 @@ async function gotDownload (url, options) {
   
     downloadStream.on('error', reject);
 
-    downloadStream.on('request', req => req.on('aborted', reject));
+    downloadStream.on('request', (req) => {
+      req.on('aborted', reject);
+      req.on('abort', reject);
+      req.on('error', reject);
+    });
+
+    downloadStream.on('abort', reject);
+    downloadStream.on('aborted', reject);
   });
 }
 
