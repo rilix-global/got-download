@@ -13,19 +13,17 @@ gotDownload.stream = stream;
 
 async function gotDownload (url, options) {
   return new Promise((resolve, reject) => {
+    let response = null;
+
     const downloadStream = stream(url, options);
 
-    downloadStream.on('end', () => {
-      resolve();
-    });
+    downloadStream.on('response', (res) => response = res);
+
+    downloadStream.on('end', () => resolve(response));
   
-    downloadStream.on('error', (error) => {
-      reject(error);
-    });
-    
-    downloadStream.on('aborted', (error) => {
-      reject(error);
-    });
+    downloadStream.on('error', reject);
+
+    downloadStream.on('request', req => req.on('aborted', reject));
   });
 }
 
