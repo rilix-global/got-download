@@ -12,6 +12,7 @@ before_install:
 
 script:
   - docker-compose run --rm module yarn install
+  - docker-compose run --rm module yarn lint
   - docker-compose run --rm module yarn test -- --coverage --forceExit --runInBand --no-cache
   - docker-compose run --rm module yarn run codeclimate-test-reporter < coverage/lcov.info
   - docker-compose run --rm module yarn run compile

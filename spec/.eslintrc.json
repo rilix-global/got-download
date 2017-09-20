@@ -1,6 +1,7 @@
 {
   "globals": {
     "afterEach": true,
+    "afterAll": true,
     "beforeEach": true,
     "it": true,
     "describe": true,

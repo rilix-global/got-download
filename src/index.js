@@ -11,7 +11,7 @@ export default gotDownload;
 
 gotDownload.stream = stream;
 
-async function gotDownload (url, options) {
+async function gotDownload(url, options) {
   return new Promise((resolve, reject) => {
     let response = null;
 
@@ -20,7 +20,7 @@ async function gotDownload (url, options) {
     downloadStream.on('response', (res) => response = res);
 
     downloadStream.on('end', () => resolve(response));
-  
+
     downloadStream.on('error', reject);
 
     downloadStream.on('request', (req) => {
@@ -40,27 +40,25 @@ function stream(url, { filename, tempPath, downloadProgress, checksum, algorithm
   handleChecksum(stream, checksum, algorithm);
 
   handleProgress(stream, downloadProgress);
-  
+
   handleFileWrite(stream, filename, tempPath);
 
   return stream;
 }
 
 function handleChecksum(stream, checksum, algorithm) {
-  if(checksum) {
+  if (checksum) {
     const hash = crypto.createHash(algorithm);
-    
-    stream.on('data', function (data) {
-      hash.update(data, 'utf8');
-    });
 
-    stream.on('readable', function () {
+    stream.on('data', data => hash.update(data, 'utf8'));
+
+    stream.on('readable', () => {
       if (stream.read() === null) {
         const calculatedChecksum = hash.digest('base64');
 
         if (checksum !== calculatedChecksum) {
           stream.removeAllListeners('end');
-          stream.destroy( new Error(`Invalid Checksum. Expected ${checksum} received ${calculatedChecksum}`));
+          stream.destroy(new Error(`Invalid Checksum. Expected ${checksum} received ${calculatedChecksum}`));
         }
       }
     });
@@ -76,29 +74,33 @@ function handleProgress(stream, downloadProgress) {
     total = length ? parseInt(length, 10) : null;
   });
 
-  stream.on('data', (chunk) => {
+  stream.on('data', chunk => {
     downloaded = downloaded + chunk.length;
     if (downloadProgress) {
-      downloadProgress({
-        total: total,
-        downloaded
-      });
+      downloadProgress({ total: total, downloaded });
     }
   });
 }
 
 function handleFileWrite(stream, filename, tempPath) {
   const tempFilename = tempPath ? path.join(tempPath, path.basename(filename) + new Date().getTime()) : null;
-  
+
   if (tempFilename) {
-    stream.on('end', async () => {
-      await rename(tempFilename, filename);
-    });
+    stream.on('end', async () => await rename(tempFilename, filename));
   }
 
-  stream.pipe(fs.createWriteStream(tempFilename || filename));
-  
+  const fileStream = fs.createWriteStream(tempFilename || filename);
+
+  fileStream.on('error', function noop() {
+  });
+
+  stream.pipe(fileStream);
+
   stream.on('error', async () => {
-    await unlink(filename);
+    try {
+      await unlink(filename);
+    } catch (e) {
+      //called
+    }
   });
 }

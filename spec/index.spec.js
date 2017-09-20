@@ -5,6 +5,7 @@ import fs from 'fs';
 import promisify from 'es6-promisify';
 import mkdirpModule from 'mkdirp';
 import rmrfModule from 'rimraf';
+
 const readFile = promisify(fs.readFile);
 const readdir = promisify(fs.readdir);
 const mkdirp = promisify(mkdirpModule);
@@ -15,13 +16,13 @@ const tempPath = path.join(process.cwd(), '/.temp/');
 describe('got-download', () => {
   beforeEach(startServer);
 
-  afterEach(async () => { await rmrf(downloadsPath); });
+  afterEach(async () => await rmrf(downloadsPath));
 
-  afterEach(async () => { await rmrf(tempPath); });
+  afterEach(async () => await rmrf(tempPath));
 
-  beforeEach(async () => { await mkdirp(downloadsPath); });
+  beforeEach(async () => await mkdirp(downloadsPath));
 
-  beforeEach(async () => { await mkdirp(tempPath); });
+  beforeEach(async () => await mkdirp(tempPath));
 
   afterEach(stopServer);
 
@@ -44,13 +45,27 @@ describe('got-download', () => {
 
   it('doesn\'t save file on error', async () => {
     expect.assertions(1);
-    
+
     try {
       await gotDownload('0.0.0.0:7845/error-download', {
         filename: path.join(downloadsPath, '/file'),
         retries: 0
       });
-    } catch(e) {
+    } catch (e) {
+      const files = await readdir(downloadsPath);
+      expect(files.length).toBe(0);
+    }
+  });
+
+  it('rejects when the path is invalid', async () => {
+    expect.assertions(1);
+
+    try {
+      await gotDownload('0.0.0.0:7845/error-download', {
+        filename: 'invalid/path',
+        retries: 0
+      });
+    } catch (e) {
       const files = await readdir(downloadsPath);
       expect(files.length).toBe(0);
     }
@@ -58,7 +73,7 @@ describe('got-download', () => {
 
   it('has promise api', async () => {
     expect.assertions(1);
-    
+
     const promise = gotDownload('0.0.0.0:7845/text-file.txt', {
       filename: path.join(downloadsPath, '/text-file.txt')
     });
@@ -69,7 +84,7 @@ describe('got-download', () => {
 
   it('has stream api', (done) => {
     expect.assertions(2);
-    
+
     const stream = gotDownload.stream('0.0.0.0:7845/text-file.txt', {
       filename: path.join(downloadsPath, '/text-file.txt')
     });
@@ -169,15 +184,15 @@ describe('got-download', () => {
 
     it('succeeds on right checksum', async () => {
       expect.assertions(1);
-      
+
       await gotDownload('0.0.0.0:7845/one-mb', {
         filename: path.join(downloadsPath, '/one-mb'),
         checksum: 'qGLDYERgb5mi0RoiB72x5Djm7SNbqcHgQdB2BCkipfGWNno44Xt4nOBiOCenY9M7ZBAqpuUgumyF0pA3plkPQw==',
         algorithm: 'sha512'
       });
-  
+
       const file = await readFile(path.join(downloadsPath, '/one-mb'), { encoding: 'utf8' });
-      
+
       expect(file).toBeDefined();
     });
   });
