@@ -1,3 +1,6 @@
+workspace:
+   - /var/run/docker.sock:/var/run/docker.sock
+
 pipeline:
   test:
     image: gitlab/dind
