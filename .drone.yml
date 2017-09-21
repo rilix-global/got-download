@@ -1,6 +1,6 @@
 pipeline:
-  backend:
-    image: node:8.5.0
+  test:
+    image: gitlab/dind
     commands:
-      - yarn install
-      - yarn test
+      - docker-compose run --rm module yarn install
+      - docker-compose run --rm module yarn test
