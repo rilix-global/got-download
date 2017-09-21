@@ -1,9 +1,8 @@
-workspace:
-  "/var/run/docker.sock":/var/run/docker.sock
-
 pipeline:
   test:
     image: gitlab/dind
     commands:
       - docker-compose run --rm module yarn install
       - docker-compose run --rm module yarn test
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
