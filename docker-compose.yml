@@ -7,4 +7,4 @@ services:
     environment:
       - CODECLIMATE_REPO_TOKEN=$CODECLIMATE_REPO_TOKEN
     volumes:
-      - /drone/src/github.com/rilix-global/got-download/:/home/node
+      - ./:/home/node
