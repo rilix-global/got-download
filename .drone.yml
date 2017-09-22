@@ -2,6 +2,7 @@ pipeline:
   test:
     image: gitlab/dind
     commands:
+      - ls -la
       - docker-compose run --rm module ls -la
       - docker-compose run --rm module yarn install
       - docker-compose run --rm module yarn test
