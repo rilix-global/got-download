@@ -1,6 +1,6 @@
 pipeline:
   test:
-    image: docker/compose
+    image: gitlab/dind
     commands:
       - ls -la
       - docker-compose run --rm module ls -la
