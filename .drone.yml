@@ -2,16 +2,13 @@ pipeline:
   test:
     image: gitlab/dind
     commands:
-      - RELATIVE_PATH="`dirname \"$0\"`"
-      - DIRNAME="`( cd \"$RELATIVE_PATH\" && pwd )`" 
-      - echo $${RELATIVE_PATH}
-      - echo $${DIRNAME}
       - pwd
       - docker --version
       - docker-compose --version
       - ls -la
       - docker ps
       - docker-compose run --rm module ls -la
+      - docker ps
       - docker-compose run --rm module yarn install
       - docker-compose run --rm module yarn test
     secrets: [ CODECLIMATE_REPO_TOKEN ]
