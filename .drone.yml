@@ -2,6 +2,7 @@ pipeline:
   test:
     image: gitlab/dind
     commands:
+      - sleep 60
       - pwd
       - docker --version
       - docker-compose --version
