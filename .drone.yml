@@ -9,10 +9,11 @@ pipeline:
       - docker-compose run --rm module yarn install
       - docker-compose run --rm module yarn test
     secrets: [ CODECLIMATE_REPO_TOKEN ]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 services:
   docker:
     image: docker:dind
     command: [ "--storage-driver=overlay" ]
     privileged: true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+
