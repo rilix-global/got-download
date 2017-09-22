@@ -6,6 +6,7 @@ pipeline:
       - docker --version
       - docker-compose --version
       - ls -la
+      - ls -la $PWD
       - docker ps
       - docker-compose run --rm module ls -la
       - docker ps
