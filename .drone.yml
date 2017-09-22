@@ -3,17 +3,15 @@ pipeline:
     image: gitlab/dind
     commands:
       - ls -la
-      - docker --tls=false ps
+      - docker ps
       - docker-compose run --rm module ls -la
       - docker-compose run --rm module yarn install
       - docker-compose run --rm module yarn test
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     secrets: [ CODECLIMATE_REPO_TOKEN ]
-    environment:
-      - DOCKER_HOST=tcp://0.0.0.0:2375
 services:
   docker:
     image: docker:dind
-    command: [ "--storage-driver=vfs", "--tls=false" ]
+    command: [ "--storage-driver=overlay" ]
     privileged: true
