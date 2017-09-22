@@ -7,4 +7,4 @@ services:
     environment:
       - CODECLIMATE_REPO_TOKEN=$CODECLIMATE_REPO_TOKEN
     volumes:
-      - ./:/home/node
+      - /home/adilson/Projects/got-download:/home/node
