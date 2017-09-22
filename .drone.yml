@@ -1,8 +1,9 @@
 pipeline:
   test:
-    image: docker:latest
+    image: gitlab/dind
     commands:
       - ls -la
+      - docker-compose build
       - docker-compose run --rm module ls -la
       - docker-compose run --rm module yarn install
       - docker-compose run --rm module yarn test
