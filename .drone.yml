@@ -1,6 +1,6 @@
 pipeline:
   test:
-    image: docker/dind
+    image: docker:stable-dind
     commands:
       - ls -la
       - docker-compose run --rm module ls -la
