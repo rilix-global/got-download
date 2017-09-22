@@ -2,6 +2,7 @@ pipeline:
   test:
     image: gitlab/dind
     commands:
+      - sleep 15
       - ls -la
       - docker ps
       - docker-compose run --rm module ls -la
