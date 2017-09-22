@@ -1,8 +1,11 @@
+workspace:
+  base: /drone/src/github.com/rilix-global/got-download
+  path: /drone/src/github.com/rilix-global/got-download
+
 pipeline:
   test:
     image: gitlab/dind
     commands:
-      - sleep 60
       - pwd
       - docker --version
       - docker-compose --version
