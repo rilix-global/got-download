@@ -8,7 +8,7 @@ pipeline:
       - ls -la
       - ls -la $PWD
       - docker ps
-      - docker-compose run --rm module ls -la
+      - docker-compose run module ls -la
       - docker ps
       - docker-compose run --rm module yarn install
       - docker-compose run --rm module yarn test
