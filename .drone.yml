@@ -2,7 +2,6 @@ pipeline:
   test:
     image: gitlab/dind
     commands:
-      - sleep 15
       - pwd
       - docker --version
       - docker-compose --version
@@ -16,9 +15,4 @@ pipeline:
       - DOCKER_DRIVER=overlay
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-services:
-  docker:
-    image: docker:dind
-    command: [ "--storage-driver=overlay" ]
     privileged: true
-
