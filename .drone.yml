@@ -6,3 +6,4 @@ pipeline:
       - docker-compose run --rm module yarn test
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    secrets: [ CODECLIMATE_REPO_TOKEN ]
