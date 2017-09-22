@@ -1,7 +1,3 @@
-workspace:
-  base: /drone/src/github.com/rilix-global/got-download
-  path: /drone/src/github.com/rilix-global/got-download
-
 pipeline:
   test:
     image: gitlab/dind
