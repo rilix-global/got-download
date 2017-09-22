@@ -1,3 +1,6 @@
+workspace:
+  base: /code
+
 pipeline:
   test:
     image: gitlab/dind
@@ -18,4 +21,3 @@ pipeline:
       - DOCKER_DRIVER=overlay
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /drone:/drone
