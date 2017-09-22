@@ -1,3 +1,6 @@
+workspace:
+  path: /got
+
 pipeline:
   test:
     image: gitlab/dind
