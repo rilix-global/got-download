@@ -7,6 +7,7 @@ pipeline:
       - docker-compose --version
       - ls -la
       - ls -la $(pwd)
+      - sleep 20
       - docker ps
       - docker-compose run module ls -la
       - docker-compose run module pwd
