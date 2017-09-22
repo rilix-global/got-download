@@ -16,10 +16,10 @@ pipeline:
       - docker-compose run --rm module yarn test
     secrets: [ CODECLIMATE_REPO_TOKEN ]
     environment:
-      - DOCKER_HOST=tcp://0.0.0.0:2375
+      - DOCKER_HOST=tcp://docker-s:2375
 
 services:
-  docker:
+  docker-s:
     image: docker:dind
     command: [ "--storage-driver=vfs", "--tls=false" ]
     privileged: true
