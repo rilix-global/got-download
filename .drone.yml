@@ -23,3 +23,5 @@ services:
     image: docker:dind
     command: [ "--storage-driver=vfs", "--tls=false" ]
     privileged: true
+    volumes:
+      - /cache:/cache
