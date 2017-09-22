@@ -14,10 +14,6 @@ pipeline:
       - docker-compose run --rm module yarn install
       - docker-compose run --rm module yarn test
     secrets: [ CODECLIMATE_REPO_TOKEN ]
-    environment:
-      - DOCKER_DRIVER=overlay
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
 services:
   docker:
     image: docker:dind
