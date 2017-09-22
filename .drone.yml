@@ -1,13 +1,11 @@
 pipeline:
   test:
-    image: docker:latest
+    image: gitlab/dind
     commands:
       - sleep 15
-      - docker info
-      - apk update
-      - apk upgrade
-      - apk add python python-dev py-pip build-base
-      - pip install docker-compose
+      - pwd
+      - docker --version
+      - docker-compose --version
       - ls -la
       - docker ps
       - docker-compose run --rm module ls -la
