@@ -1,9 +1,7 @@
-workspace:
-  base: /code
-
 pipeline:
   test:
     image: gitlab/dind
+    detach: true
     commands:
       - pwd
       - docker --version
