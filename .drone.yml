@@ -1,6 +1,3 @@
-workspace:
-  path: /got
-
 pipeline:
   test:
     image: gitlab/dind
@@ -12,6 +9,7 @@ pipeline:
       - ls -la $(pwd)
       - docker ps
       - docker-compose run module ls -la
+      - docker-compose run module pwd
       - docker ps
       - docker-compose run --rm module yarn install
       - docker-compose run --rm module yarn test
