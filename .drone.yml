@@ -12,3 +12,5 @@ pipeline:
 services:
   docker:
     image: docker:dind
+    command: [ "--storage-driver=overlay"]
+    privileged: true
