@@ -24,4 +24,4 @@ services:
     command: [ "--storage-driver=vfs", "--tls=false" ]
     privileged: true
     volumes:
-      - /cache:/cache
+      - /cache
