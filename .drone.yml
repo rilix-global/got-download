@@ -2,16 +2,7 @@ pipeline:
   test:
     image: gitlab/dind
     commands:
-      - pwd
-      - docker --version
-      - docker-compose --version
-      - ls -la
-      - ls -la $(pwd)
       - sleep 10
-      - docker --tls=false ps
-      - docker-compose run module ls -la
-      - docker-compose run module pwd
-      - docker ps
       - docker-compose run --rm module yarn install
       - docker-compose run --rm module yarn test
     secrets: [ CODECLIMATE_REPO_TOKEN ]
@@ -24,4 +15,4 @@ services:
     command: [ "--storage-driver=overlay", "--tls=false" ]
     privileged: true
     volumes:
-      - /cache
+      - /docker-cache:/var/lib/docker
