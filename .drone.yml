@@ -15,3 +15,5 @@ services:
     image: docker:dind
     command: [ "--storage-driver=overlay" ]
     privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
