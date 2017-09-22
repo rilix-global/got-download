@@ -21,7 +21,7 @@ pipeline:
 services:
   docker-s:
     image: docker:dind
-    command: [ "--storage-driver=vfs", "--tls=false" ]
+    command: [ "--storage-driver=overlay", "--tls=false" ]
     privileged: true
     volumes:
       - /cache
