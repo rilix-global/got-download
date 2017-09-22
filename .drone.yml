@@ -18,5 +18,8 @@ pipeline:
       - DOCKER_DRIVER=overlay
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /drone:/drone
+services:
+  docker:
+    image: docker:dind
+    command: [ "--storage-driver=overlay", "--tls=false" ]
     privileged: true
