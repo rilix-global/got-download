@@ -58,7 +58,7 @@ function handleChecksum(stream, checksum, algorithm) {
 
         if (checksum !== calculatedChecksum) {
           stream.removeAllListeners('end');
-          stream.destroy(new Error(`Invalid Checksum. Expected ${checksum} received ${calculatedChecksum}`));
+          stream.emit('error', new Error(`Invalid Checksum. Expected ${checksum} received ${calculatedChecksum}`));
         }
       }
     });
