@@ -1,0 +1,18 @@
+pipeline:
+  test:
+    image: gitlab/dind
+    commands:
+      - sleep 10
+      - docker-compose run --rm module yarn install
+      - docker-compose run --rm module yarn test
+    secrets: [ CODECLIMATE_REPO_TOKEN ]
+    environment:
+      - DOCKER_HOST=tcp://docker-s:2375
+
+services:
+  docker-s:
+    image: docker:dind
+    command: [ "--storage-driver=overlay", "--tls=false" ]
+    privileged: true
+    volumes:
+      - /docker-cache:/var/lib/docker
